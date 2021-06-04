@@ -1,13 +1,14 @@
 // import methods
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { auth } from "./services/firebase";
+import { fetchChars } from "./services/char-service";
 
 // import stylesheets
 import "./App.css";
 
 // import components
 import Header from "./components/Header/Header";
+
 
 export default function App() {
   const [userState, setUserState] = useState({ user: null });
@@ -20,11 +21,10 @@ export default function App() {
 
   useEffect(() => {
     const getAppData = async () => {
-      if (!userState.user) return;
+      if (!userState) return;
       try {
-        const characters = await axios.get(
-          "http://localhost:3001/api/characters"
-        );
+        console.log("calling fetchChars");
+        const characters = await fetchChars();
         setCharState((prevState) => ({
           ...prevState,
           characters,
@@ -33,10 +33,14 @@ export default function App() {
         console.error(error);
       }
     };
+    console.log("calling getAppData");
     getAppData();
 
     // set up auth observer
-    auth.onAuthStateChanged(user => setUserState(user));
+    const unsubscribe = auth.onAuthStateChanged(user => setUserState(user));
+    // function to clean up subscriptions
+    return () => unsubscribe();
+
   }, []);
 
   return (
