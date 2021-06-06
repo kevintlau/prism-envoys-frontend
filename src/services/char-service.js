@@ -2,17 +2,20 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3001/api/characters";
 
-const fetchChars = () => {
-  const results = axios.get(BASE_URL);
-  return results;
+const fetchChars = (userId) => {
+  return axios.get(`${BASE_URL}?uid=${userId}`);
 }
 
 const createChar = (newChar) => {
-  const createdChar = axios.post(BASE_URL, newChar);
-  return createdChar;
+  return axios.post(BASE_URL, newChar);
+}
+
+const deleteChar = (characterId, userId) => {
+  return axios.delete(`${BASE_URL}/${characterId}?uid=${userId}`);
 }
 
 export {
   fetchChars,
   createChar,
+  deleteChar,
 } 

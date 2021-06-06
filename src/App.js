@@ -52,7 +52,7 @@ export default function App() {
     const getAppData = async () => {
       if (!appState.user) return;
       try {
-        const characters = await fetchChars();
+        const characters = await fetchChars(appState.user.uid);
         setCharState((prevState) => ({
           ...prevState,
           characters,

@@ -1,6 +1,6 @@
 import "./CharacterSelect.css";
 import { generateStats } from "../../gamedata/startingStats";
-import { createChar } from "../../services/char-service";
+import { createChar, deleteChar } from "../../services/char-service";
 
 export default function CharacterSelect(props) {
   // create the new character form using controlled components
@@ -17,19 +17,20 @@ export default function CharacterSelect(props) {
   const handleSubmit = async (evt) => {
     if (!props.user) return;
     evt.preventDefault();
-
+    // populate new character object with stats and user id
     const startingStats = generateStats(props.newChar.class);
     let newChar = {
       ...props.newChar,
       ...startingStats,
       uid: props.user.uid,
     };
-
+    // create new character in database
     try {
       const createdChar = await createChar(newChar);
       props.setCharState(prevState => ({
         ...prevState,
         characters: { data: [...prevState.characters.data, createdChar]},
+        // reset new character form
         newChar: {
           name: "",
           race: "Human",
@@ -41,6 +42,20 @@ export default function CharacterSelect(props) {
     }
   }
 
+  const handleDelete = async (charId) => {
+    if (!props.user) return;
+    try {
+      const characters = await deleteChar(charId, props.user.uid);
+      props.setCharState(prevState => ({
+        ...prevState,
+        characters,
+      }));
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  // JSX component
   return (
     <div className="char-select">
       <h2>Character Select</h2>
@@ -51,6 +66,7 @@ export default function CharacterSelect(props) {
             <p>Name: {char.name}</p>
             <p>Race: {char.race}</p>
             <p>Class: {char.class}</p>
+            <button onClick={() => handleDelete(char._id)}>Delete</button>
           </article>
         ))}
         <article className="char-form">
@@ -72,6 +88,7 @@ export default function CharacterSelect(props) {
             >
               <option value="Human">Human</option>
               <option value="Giant">Giant</option>
+              <option value="Elf">Elf</option>
               <option value="Dwarf">Dwarf</option>
             </select>
             <label htmlFor="class">Class:</label>
