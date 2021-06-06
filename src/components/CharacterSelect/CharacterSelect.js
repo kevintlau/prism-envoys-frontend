@@ -1,17 +1,96 @@
 import "./CharacterSelect.css";
+import { generateStats } from "../../gamedata/startingStats";
+import { createChar } from "../../services/char-service";
 
-const CharacterSelect = (props) => (
-  <div className="char-select">
-    <h2>Character Select</h2>
-    {props.chars.map((char, idx) => (
-      <article key={idx}>
-        <p>Character {idx + 1}</p>
-        <p>Name: {char.name}</p>
-        <p>Race: {char.race}</p>
-        <p>Class: {char.class}</p>
-      </article>
-    ))}
-  </div>
-)
+export default function CharacterSelect(props) {
+  // create the new character form using controlled components
+  const handleChange = (evt) => {
+    props.setCharState((prevState) => ({
+      ...prevState,
+      newChar: {
+        ...prevState.newChar,
+        [evt.target.name]: evt.target.value,
+      },
+    }));
+  };
 
-export default CharacterSelect;
+  const handleSubmit = async (evt) => {
+    if (!props.user) return;
+    evt.preventDefault();
+
+    const startingStats = generateStats(props.newChar.class);
+    let newChar = {
+      ...props.newChar,
+      ...startingStats,
+      uid: props.user.uid,
+    };
+
+    try {
+      const createdChar = await createChar(newChar);
+      props.setCharState(prevState => ({
+        ...prevState,
+        characters: { data: [...prevState.characters.data, createdChar]},
+        newChar: {
+          name: "",
+          race: "Human",
+          class: "Crusader"
+        }
+      }));
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  return (
+    <div className="char-select">
+      <h2>Character Select</h2>
+      <div className="char-list">
+        {props.chars.map((char, idx) => (
+          <article className="char" key={idx}>
+            <p>Character {idx + 1}</p>
+            <p>Name: {char.name}</p>
+            <p>Race: {char.race}</p>
+            <p>Class: {char.class}</p>
+          </article>
+        ))}
+        <article className="char-form">
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={props.newChar.name}
+              onChange={handleChange}
+            />
+            <label htmlFor="race">Race:</label>
+            <select
+              name="race"
+              id="race"
+              value={props.newChar.race}
+              onChange={handleChange}
+            >
+              <option value="Human">Human</option>
+              <option value="Giant">Giant</option>
+              <option value="Dwarf">Dwarf</option>
+            </select>
+            <label htmlFor="class">Class:</label>
+            <select
+              name="class"
+              id="class"
+              value={props.newChar.class}
+              onChange={handleChange}
+            >
+              <option value="Crusader">Crusader (durable fighter)</option>
+              <option value="Inquisitor">Inquisitor (accurate ranger)</option>
+              <option value="Shepherd">Shepherd (powerful caster)</option>
+            </select>
+            <button disabled={!props.user}>
+              Create character
+            </button>
+          </form>
+        </article>
+      </div>
+    </div>
+  );
+}

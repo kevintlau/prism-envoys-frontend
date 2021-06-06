@@ -1,7 +1,7 @@
 import "./Header.css";
 import { login, logout } from "../../services/firebase";
 
-function Header(props) {
+export default function Header(props) {
   return (
     <header className="header">
       <h1>Prism Envoys</h1>
@@ -24,5 +24,3 @@ function Header(props) {
     </header>
   );
 }
-
-export default Header;

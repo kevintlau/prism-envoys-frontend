@@ -24,30 +24,27 @@ export default function App() {
   // state used to store characters on character select
   const [charState, setCharState] = useState({
     characters: { data: [] },
+    newChar: {
+      name: "",
+      race: "Human",
+      class: "Crusader",
+    },
   });
   
   // state used to store active character inside game
   const [playerState, setPlayerState] = useState({
-    stats: {
-      level: 1,
-      xp: 0,
-      maxHp: 10,
-      currentHp: 10,
-      maxMp: 10,
-      currentMp: 10,
-      atk: 4,
-      dex: 4,
-      def: 4,
-      luk: 4,
-      location: "Gleam Town",
-      inventory: [],
-    }
+    character: {}
   })
   
   // store the components into an object so they can be rendered based on state
   const componentsObj = {
     "Welcome": <Welcome />,
-    "CharacterSelect": <CharacterSelect chars={ charState.characters.data } />,
+    "CharacterSelect": <CharacterSelect 
+                          chars={ charState.characters.data } 
+                          newChar={ charState.newChar }
+                          setCharState={ setCharState }
+                          user={appState.user}
+                       />,
     // "Game": <Game />
   }
 
@@ -55,7 +52,6 @@ export default function App() {
     const getAppData = async () => {
       if (!appState.user) return;
       try {
-        console.log("calling fetchChars");
         const characters = await fetchChars();
         setCharState((prevState) => ({
           ...prevState,
