@@ -11,16 +11,13 @@ import "./App.css";
 // import components
 import Header from "./components/Header/Header";
 
-
 export default function App() {
-
   // ------- STATES -----------------------------------------------------------
   // state used to store logged-in user and active page on app
   const [appState, setAppState] = useState({
     user: null,
     page: "Welcome",
   });
-
   // state used to store characters on character select
   const [charState, setCharState] = useState({
     characters: { data: [] },
@@ -30,23 +27,24 @@ export default function App() {
       class: "Crusader",
     },
   });
-  
   // state used to store active character inside game
   const [playerState, setPlayerState] = useState({
-    character: {}
-  })
+    character: {},
+  });
   
   // store the components into an object so they can be rendered based on state
   const componentsObj = {
-    "Welcome": <Welcome />,
-    "CharacterSelect": <CharacterSelect 
-                          chars={ charState.characters.data } 
-                          newChar={ charState.newChar }
-                          setCharState={ setCharState }
-                          user={appState.user}
-                       />,
+    Welcome: <Welcome />,
+    CharacterSelect: (
+      <CharacterSelect
+        chars={charState.characters.data}
+        newChar={charState.newChar}
+        setCharState={setCharState}
+        user={appState.user}
+      />
+    ),
     // "Game": <Game />
-  }
+  };
 
   useEffect(() => {
     const getAppData = async () => {
@@ -65,25 +63,22 @@ export default function App() {
     getAppData();
 
     // set up auth observer
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       // user becomes user object on login, or null on logout
       if (user) {
         setAppState({ user, page: "CharacterSelect" });
       } else {
-        setAppState({ user, page: "Welcome" })
+        setAppState({ user, page: "Welcome" });
       }
     });
     // function to clean up subscriptions
     return () => unsubscribe();
-
-  }, [ appState.user ]);
+  }, [appState.user]);
 
   return (
     <>
-      <Header
-        user={ appState.user }
-      />
-      { componentsObj[appState.page] /* render component based on state */ }
+      <Header user={appState.user} setAppState={setAppState} />
+      {componentsObj[appState.page] /* render component based on state */}
     </>
   );
 }
