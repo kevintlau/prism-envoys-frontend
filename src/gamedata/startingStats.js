@@ -1,3 +1,5 @@
+import LOCATIONS from "./locations";
+
 const BASE_STATS = {
   level: 1,
   xp: 0,
@@ -9,7 +11,7 @@ const BASE_STATS = {
   dex: 5,
   def: 5,
   luk: 5,
-  location: "Gleam Town",
+  location: LOCATIONS.GLEAM_TOWN,
   inventory: [],
 };
 
@@ -39,7 +41,7 @@ const SHEPHERD_STATS = {
   luk: 8,
 };
 
-const generateStats = (charClass) => {
+export default generateStats = (charClass) => {
   switch (charClass) {
     case "Crusader":
       return { ...BASE_STATS, ...CRUSADER_STATS };
@@ -50,4 +52,3 @@ const generateStats = (charClass) => {
   }
 };
 
-export { generateStats };
