@@ -29,14 +29,14 @@ const ACTIONS = {
 // movement actions in field areas - not counted in random action limit
 const MOVEMENT_ACTIONS = {
   [LOCATIONS.GLEAM_TOWN]: {
-    [LOCATIONS.GLIMMER_PLAINS]: "Go to Glimmer Plains",
+    GOTO_GLIMMER_PLAINS: "Go to Glimmer Plains",
   },
   [LOCATIONS.GLIMMER_PLAINS]: {
-    [LOCATIONS.GLEAM_TOWN]: "Go to Gleam Town",
-    [LOCATIONS.SHADE_CAVE]: "Go to Shade Cave",
+    GOTO_GLEAM_TOWN: "Go to Gleam Town",
+    GOTO_SHADE_CAVE: "Go to Shade Cave",
   },
   [LOCATIONS.SHADE_CAVE]: {
-    [LOCATIONS.GLIMMER_PLAINS]: "Go to Glimmer Plains",
+    GOTO_GLIMMER_PLAINS: "Go to Glimmer Plains",
   },
 };
 
@@ -65,19 +65,24 @@ export default function generateActions(inBattle, playerClass, location) {
     let actions = [];
     // make a list of indices of the random actions
     let actionsIdxArray = [];
+    const actionEntries = Object.entries(ACTIONS[location]);
+    const movementActionEntries = Object.entries(MOVEMENT_ACTIONS[location]);
     switch(location) {
       case LOCATIONS.GLEAM_TOWN:
-        actions = [...ACTIONS[location], ...MOVEMENT_ACTIONS[location]];
+        actions = [
+          ...actionEntries,
+          ...movementActionEntries,
+        ];
         break;
       case LOCATIONS.GLIMMER_PLAINS:
         while (actionsIdxArray.length < FIELD_ACTION_COUNT) {
-          let idx = Math.floor(Math.random() * ACTIONS[location].keys.length);
+          let idx = Math.floor(Math.random() * Object.keys(ACTIONS[location]).length);
           if (!actionsIdxArray.includes(idx)) actionsIdxArray.push(idx);
         }
-        actionsIdxArray.forEach(idx => {
-          actions.push(ACTIONS[location].entries[idx]);
-        });
-        actions = [...actions, ...MOVEMENT_ACTIONS[location]];
+        actions = [
+          ...actionsIdxArray.map(idx => actionEntries[idx]),
+          ...movementActionEntries,
+        ];
         break;
     }
     return actions;

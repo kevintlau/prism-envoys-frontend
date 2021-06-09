@@ -50,6 +50,7 @@ export default function handleAction(
       setActionState(generateActions(true));
       break;
     case ACTIONS.SPELL: 
+      if (playerState.mp < 4) return;
       setPlayerState(prevState => ({...prevState, mp: prevState.mp - 4}));
       handleCombat(playerState.atk * 2);
   }

@@ -2,14 +2,15 @@
 import { useState, useEffect } from "react";
 import { auth } from "./services/firebase";
 import { fetchChars } from "./services/char-service";
-import Welcome from "./components/Welcome/Welcome";
-import CharacterSelect from "./components/CharacterSelect/CharacterSelect";
 
 // import stylesheets
 import "./App.css";
 
 // import components
 import Header from "./components/Header/Header";
+import Welcome from "./components/Welcome/Welcome";
+import CharacterSelect from "./components/CharacterSelect/CharacterSelect";
+import Game from "./components/Game/Game";
 
 export default function App() {
   // ------- STATES -----------------------------------------------------------
@@ -78,6 +79,7 @@ export default function App() {
   return (
     <>
       <Header user={appState.user} setAppState={setAppState} />
+      <Game />
       {componentsObj[appState.page] /* render component based on state */}
     </>
   );

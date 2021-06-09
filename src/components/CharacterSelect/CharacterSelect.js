@@ -1,5 +1,5 @@
 import "./CharacterSelect.css";
-import { generateStats } from "../../gamedata/startingStats";
+import generateStats from "../../gamedata/startingStats";
 import { createChar, deleteChar } from "../../services/char-service";
 
 export default function CharacterSelect(props) {

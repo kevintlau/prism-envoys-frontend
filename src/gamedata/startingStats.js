@@ -41,7 +41,7 @@ const SHEPHERD_STATS = {
   luk: 8,
 };
 
-export default generateStats = (charClass) => {
+export default function generateStats(charClass) {
   switch (charClass) {
     case "Crusader":
       return { ...BASE_STATS, ...CRUSADER_STATS };
