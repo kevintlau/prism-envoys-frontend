@@ -10,12 +10,17 @@ const createChar = (newChar) => {
   return axios.post(BASE_URL, newChar);
 }
 
-const deleteChar = (characterId, userId) => {
-  return axios.delete(`${BASE_URL}/${characterId}?uid=${userId}`);
+const selectChar = (charId, userId) => {
+  return axios.get(`${BASE_URL}/${charId}?uid=${userId}`)
+}
+
+const deleteChar = (charId, userId) => {
+  return axios.delete(`${BASE_URL}/${charId}?uid=${userId}`);
 }
 
 export {
   fetchChars,
   createChar,
+  selectChar,
   deleteChar,
 } 

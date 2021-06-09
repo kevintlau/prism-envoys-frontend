@@ -1,0 +1,4 @@
+.game {
+  display: grid;
+  grid-template-columns: 5fr 2fr 5fr;
+}

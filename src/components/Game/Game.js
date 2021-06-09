@@ -1,10 +1,14 @@
-import generateActions from "../../gamedata/actions";
+import "./Game.css";
+import PlayerPanel from "../PlayerPanel/PlayerPanel";
+import ActionsPanel from "../ActionsPanel/ActionsPanel";
+import StatusPanel from "../StatusPanel/StatusPanel";
 
 export default function Game(props) {
-  const actions = generateActions(false, "Crusader", "Glimmer Plains");
   return (
     <div className="game">
-      {JSON.stringify(actions)}
+      <PlayerPanel character={props.playerState.character} />
+      <ActionsPanel />
+      <StatusPanel />
     </div>
   )
 }

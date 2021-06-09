@@ -3,19 +3,10 @@ import { login, logout } from "../../services/firebase";
 
 export default function Header(props) {
   const handleTitleClick = () => {
-    if (props.user) {
-      console.log("user is logged in; moving to CharSelect");
-      props.setAppState((prevState) => ({
-        ...prevState,
-        page: "CharacterSelect",
-      }));
-    } else {
-      console.log("user is not logged in; moving to Welcome");
-      props.setAppState((prevState) => ({
-        ...prevState,
-        page: "Welcome",
-      }));
-    }
+    props.setPlayerState((prevState) => ({
+      ...prevState,
+      character: null,
+    }));
   };
 
   // generate a username for greeting, based on user's email

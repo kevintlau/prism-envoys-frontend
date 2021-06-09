@@ -1,3 +1,5 @@
+import ENEMIES from "./enemies";
+
 export default function handleAction(
   action,
   location,
@@ -44,14 +46,21 @@ export default function handleAction(
   }
 
   switch (action) {
+    case ACTIONS.REFINE_WEAPON:
+      setPlayerState(prevState => ({...prevState, atk: prevState.atk + 1}));
+      break;
     case ACTIONS.POKE_BEAR:
       setEnemyState(ENEMIES.BEAR);
       setResultState("The bear wakes up!");
       setActionState(generateActions(true));
       break;
+    case ACTIONS.ATTACK:
+      handleCombat(playerState.atk);
+      break;
     case ACTIONS.SPELL: 
       if (playerState.mp < 4) return;
       setPlayerState(prevState => ({...prevState, mp: prevState.mp - 4}));
       handleCombat(playerState.atk * 2);
+      break;
   }
 }

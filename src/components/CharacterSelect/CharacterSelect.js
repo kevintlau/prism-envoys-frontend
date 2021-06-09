@@ -1,6 +1,11 @@
 import "./CharacterSelect.css";
 import generateStats from "../../gamedata/startingStats";
-import { createChar, deleteChar } from "../../services/char-service";
+import { createChar, selectChar, deleteChar } from "../../services/char-service";
+
+// props: 
+//   chars, newChar, setCharState,
+//   userState,
+//   playerState, setPlayerState
 
 export default function CharacterSelect(props) {
   // create the new character form using controlled components
@@ -15,14 +20,14 @@ export default function CharacterSelect(props) {
   };
 
   const handleSubmit = async (evt) => {
-    if (!props.user) return;
+    if (!props.userState.user) return;
     evt.preventDefault();
     // populate new character object with stats and user id
     const startingStats = generateStats(props.newChar.class);
     let newChar = {
       ...props.newChar,
       ...startingStats,
-      uid: props.user.uid,
+      uid: props.userState.user.uid,
     };
     // create new character in database
     try {
@@ -42,10 +47,23 @@ export default function CharacterSelect(props) {
     }
   }
 
-  const handleDelete = async (charId) => {
-    if (!props.user) return;
+  const handleSelect = async (charId) => {
+    if (!props.userState.user) return;
     try {
-      const characters = await deleteChar(charId, props.user.uid);
+      const character = await selectChar(charId, props.userState.user.uid);
+      props.setPlayerState(prevState => ({
+        ...prevState,
+        character,
+      }));
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  const handleDelete = async (charId) => {
+    if (!props.userState.user) return;
+    try {
+      const characters = await deleteChar(charId, props.userState.user.uid);
       props.setCharState(prevState => ({
         ...prevState,
         characters,
@@ -66,10 +84,12 @@ export default function CharacterSelect(props) {
             <p>Name: {char.name}</p>
             <p>Race: {char.race}</p>
             <p>Class: {char.class}</p>
+            <button onClick={() => handleSelect(char._id)}>Play</button>
             <button onClick={() => handleDelete(char._id)}>Delete</button>
           </article>
         ))}
         <article className="char-form">
+          <h4>Create New Character</h4>
           <form onSubmit={handleSubmit}>
             <label htmlFor="name">Name:</label>
             <input
@@ -102,7 +122,7 @@ export default function CharacterSelect(props) {
               <option value="Inquisitor">Inquisitor (accurate ranger)</option>
               <option value="Shepherd">Shepherd (powerful caster)</option>
             </select>
-            <button disabled={!props.user}>
+            <button disabled={!props.userState.user}>
               Create character
             </button>
           </form>
