@@ -1,8 +1,12 @@
 import "./CharacterSelect.css";
 import generateStats from "../../gamedata/startingStats";
-import { createChar, selectChar, deleteChar } from "../../services/char-service";
+import {
+  createChar,
+  selectChar,
+  deleteChar,
+} from "../../services/char-service";
 
-// props: 
+// props:
 //   chars, newChar, setCharState,
 //   userState,
 //   playerState, setPlayerState
@@ -32,46 +36,46 @@ export default function CharacterSelect(props) {
     // create new character in database
     try {
       const createdChar = await createChar(newChar);
-      props.setCharState(prevState => ({
+      props.setCharState((prevState) => ({
         ...prevState,
-        characters: { data: [...prevState.characters.data, createdChar]},
+        characters: { data: [...prevState.characters.data, createdChar] },
         // reset new character form
         newChar: {
           name: "",
           race: "Human",
-          class: "Crusader"
-        }
+          class: "Crusader",
+        },
       }));
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const handleSelect = async (charId) => {
     if (!props.userState.user) return;
     try {
       const character = await selectChar(charId, props.userState.user.uid);
-      props.setPlayerState(prevState => ({
+      props.setPlayerState((prevState) => ({
         ...prevState,
         character,
       }));
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const handleDelete = async (charId) => {
     if (!props.userState.user) return;
     try {
       const characters = await deleteChar(charId, props.userState.user.uid);
-      props.setCharState(prevState => ({
+      props.setCharState((prevState) => ({
         ...prevState,
         characters,
       }));
-    } catch(error) {
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   // JSX component
   return (
@@ -122,9 +126,7 @@ export default function CharacterSelect(props) {
               <option value="Inquisitor">Inquisitor (accurate ranger)</option>
               <option value="Shepherd">Shepherd (powerful caster)</option>
             </select>
-            <button disabled={!props.userState.user}>
-              Create character
-            </button>
+            <button disabled={!props.userState.user}>Create character</button>
           </form>
         </article>
       </div>

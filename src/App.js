@@ -45,7 +45,14 @@ export default function App() {
         setPlayerState={setPlayerState}
       />
     ),
-    Game: <Game playerState={playerState} setPlayerState={setPlayerState} />,
+    Game: (
+      <Game
+        userState={userState}
+        playerState={playerState}
+        setPlayerState={setPlayerState}
+        setCharState={setCharState}
+      />
+    ),
   };
 
   useEffect(() => {

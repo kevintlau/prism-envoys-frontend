@@ -6,9 +6,14 @@ import StatusPanel from "../StatusPanel/StatusPanel";
 export default function Game(props) {
   return (
     <div className="game">
-      <PlayerPanel character={props.playerState.character} />
+      <PlayerPanel
+        userState={props.userState}
+        character={props.playerState.character.data}
+        setCharState={props.setCharState}
+        setPlayerState={props.setPlayerState}
+      />
       <ActionsPanel />
       <StatusPanel />
     </div>
-  )
+  );
 }
