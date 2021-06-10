@@ -19,7 +19,6 @@ export default function ActionsPanel(props) {
               action[0],
               props.character,
               props.setPlayerState,
-              props.setActionState,
               props.enemy,
               props.setEnemyState,
               props.setResultState
