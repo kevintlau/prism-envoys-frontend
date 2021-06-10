@@ -13,8 +13,8 @@ export default function handleAction(
 ) {
   // helper function to handle combat steps
   function handleCombat(damageToEnemy) {
-    const newEnemyHealth = enemy.hp - damageToEnemy;
-    const newCharacterHealth = character.hp - enemy.atk;
+    const newEnemyHealth = enemy.currentHp - damageToEnemy;
+    const newCharacterHealth = character.currentHp - enemy.atk;
     const enemy = enemy.name;
     const enemyAtk = enemy.atk;
     if (newEnemyHealth <= 0) {
@@ -34,11 +34,11 @@ export default function handleAction(
     } else {
       setEnemyState((prevState) => ({
         ...prevState,
-        hp: prevState.hp - damageToEnemy,
+        currentHp: prevState.currentHp - damageToEnemy,
       }));
       setPlayerState((prevState) => ({
         ...prevState,
-        hp: prevState.hp - enemyAtk,
+        currentHp: prevState.currentHp - enemyAtk,
       }));
       setResultState(
         `You hit the ${enemy} for ${damageToEnemy} damage! The ${enemy} hits you for ${enemyAtk} damage!`

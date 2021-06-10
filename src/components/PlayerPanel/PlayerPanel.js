@@ -8,10 +8,11 @@ export default function PlayerPanel(props) {
     if (!props.userState.user) return;
     evt.preventDefault();
     try {
-      const characters = await saveChar(character);
+      const charactersData = await saveChar(character);
+      console.log(charactersData);
       props.setCharState((prevState) => ({
         ...prevState,
-        characters,
+        characters: charactersData.data,
       }));
       props.setPlayerState({ character: null });
     } catch (error) {
@@ -21,12 +22,19 @@ export default function PlayerPanel(props) {
 
   return (
     <div className="player-panel">
-      <p>Name: {character.name}</p>
       <p>
-        Level {character.level} {character.race} {character.class}
+        <span style={{ fontWeight: "bold" }}>{character.name}</span>
+        , {character.race} {character.class}
       </p>
-      <p>XP: {character.xp}</p>
-      <button onClick={handleSave}>Save and Exit</button>
+      <p>
+        Level: {character.level} | XP: {character.xp}
+      </p>
+      <p>HP: {character.currentHp} / {character.maxHp}</p>
+      <p>MP: {character.currentHp} / {character.maxMp}</p>
+      <p>ATK: {character.atk}</p>
+      <p>DEF: {character.def}</p>
+      <p>Location: {character.location}</p>
+      {!props.enemy ? <button onClick={handleSave}>Save and Exit</button> : ""}
     </div>
   );
 }

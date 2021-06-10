@@ -1,15 +1,18 @@
 const ENEMIES = {
   GOBLIN: {
     atk: 2,
-    hp: 6,
+    currentHp: 6,
+    maxHp: 6,
   },
   OGRE: {
     atk: 4,
-    hp: 10,
+    currentHp: 10,
+    maxHp: 10,
   },
   BEAR: {
     atk: 3,
-    hp: 8,
+    currentHp: 8,
+    maxHp: 8,
   }
 }
 

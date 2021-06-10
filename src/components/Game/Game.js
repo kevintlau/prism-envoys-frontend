@@ -6,12 +6,10 @@ import generateActions from "../../gamedata/actions";
 import { useState } from "react";
 
 export default function Game(props) {
-  const [actionState, setActionState] = useState([]);
   const [enemyState, setEnemyState] = useState(null);
   const [resultState, setResultState] = useState("");
 
   const character = props.playerState.character;
-  setActionState(generateActions(false, character.class, character.location));
 
   return (
     <div className="game">
@@ -20,17 +18,16 @@ export default function Game(props) {
         character={character}
         setCharState={props.setCharState}
         setPlayerState={props.setPlayerState}
+        enemy={enemyState}
       />
       <ActionsPanel
-        actionState={actionState}
-        setActionState={setActionState}
         character={character}
         setPlayerState={props.setPlayerState}
         enemy={enemyState}
         setEnemyState={setEnemyState}
         setResultState={setResultState}
       />
-      <StatusPanel resultState={resultState} />
+      <StatusPanel resultState={resultState} enemy={enemyState} />
     </div>
   );
 }

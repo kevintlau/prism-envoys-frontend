@@ -3,10 +3,14 @@ import generateActions from "../../gamedata/actions";
 import handleAction from "../../gamedata/actionHandler";
 
 export default function ActionsPanel(props) {
-  const actions = generateActions(false, "Crusader", "Glimmer Plains");
+  const actions = generateActions(
+    props.enemyState,
+    props.character.class,
+    props.character.location
+  );
   return (
     <div className="actions-panel">
-      <h1>Actions</h1>
+      <h3>Actions</h3>
       {actions.map((action, idx) => (
         <button
           key={idx}
@@ -25,7 +29,6 @@ export default function ActionsPanel(props) {
           {action[1]}
         </button>
       ))}
-      {JSON.stringify(actions)}
     </div>
   );
 }

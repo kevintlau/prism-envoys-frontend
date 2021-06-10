@@ -57,13 +57,10 @@ export default function CharacterSelect(props) {
     if (!props.userState.user) return;
     try {
       const characterData = await selectChar(charId, props.userState.user.uid);
-      // console.log(props.playerState);
-      // console.log(characterData.data);
-      props.setPlayerState({ character: characterData.data, });
-      // props.setPlayerState((prevState) => ({
-      //   ...prevState,
-      //   character: characterData.data,
-      // }));
+      props.setPlayerState((prevState) => ({
+        ...prevState,
+        character: characterData.data,
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -91,8 +88,8 @@ export default function CharacterSelect(props) {
           <article className="char" key={idx}>
             <p>Character {idx + 1}</p>
             <p>Name: {char.name}</p>
-            <p>Race: {char.race}</p>
-            <p>Class: {char.class}</p>
+            <p>Level {char.level} {char.race} {char.class}</p>
+            <p>Location: {char.location}</p>
             <button onClick={() => handleSelect(char._id)}>Play</button>
             <button onClick={() => handleDelete(char._id)}>Delete</button>
           </article>
