@@ -1,32 +1,33 @@
 import ENEMIES from "./enemies";
+import ACTIONS from "./actions";
+import generateActions from "./actions";
 
 export default function handleAction(
   action,
-  location,
-  playerState,
+  character,
   setPlayerState,
   setActionState,
-  enemyState,
+  enemy,
   setEnemyState,
   setResultState
 ) {
   // helper function to handle combat steps
   function handleCombat(damageToEnemy) {
-    const newEnemyHealth = enemyState.hp - damageToEnemy;
-    const newPlayerHealth = playerState.hp - enemyState.atk;
-    const enemy = enemyState.name;
-    const enemyAtk = enemyState.atk;
+    const newEnemyHealth = enemy.hp - damageToEnemy;
+    const newCharacterHealth = character.hp - enemy.atk;
+    const enemy = enemy.name;
+    const enemyAtk = enemy.atk;
     if (newEnemyHealth <= 0) {
       setResultState(
         `You hit the ${enemy} for ${damageToEnemy} damage. You defeated the ${enemy}!`
       );
       setPlayerState((prevState) => ({
         ...prevState,
-        xp: prevState.xp + enemyState.xp,
+        xp: prevState.xp + enemy.xp,
       }));
       setEnemyState(null);
-      setActionState(generateActions(false));
-    } else if (newPlayerHealth <= 0) {
+      setActionState(generateActions(false, character.class, character.location));
+    } else if (newCharacterHealth <= 0) {
       setResultState(
         `The ${enemy} hits you for ${enemyAtk} damage. You are defeated.`
       );
@@ -45,22 +46,33 @@ export default function handleAction(
     }
   }
 
+  const location = character.location;
+
   switch (action) {
     case ACTIONS.REFINE_WEAPON:
-      setPlayerState(prevState => ({...prevState, atk: prevState.atk + 1}));
+      if (location === "Gleam Town") {
+        setPlayerState(prevState => ({...prevState, atk: prevState.atk + 2}));
+      }
+      if (location === "Glimmer Plains") {
+        setPlayerState(prevState => ({...prevState, atk: prevState.atk + 1}));
+      }
       break;
+    case ACTIONS.TALK_TO_ADVENTURER:
+      if (location === "Glimmer Plains") {
+        setPlayerState(prevState => ({...prevState, xp: prevState.xp + 1}));
+      }
     case ACTIONS.POKE_BEAR:
       setEnemyState(ENEMIES.BEAR);
       setResultState("The bear wakes up!");
       setActionState(generateActions(true));
       break;
     case ACTIONS.ATTACK:
-      handleCombat(playerState.atk);
+      handleCombat(character.atk);
       break;
     case ACTIONS.SPELL: 
-      if (playerState.mp < 4) return;
+      if (character.mp < 4) return;
       setPlayerState(prevState => ({...prevState, mp: prevState.mp - 4}));
-      handleCombat(playerState.atk * 2);
+      handleCombat(character.atk * 2);
       break;
   }
 }

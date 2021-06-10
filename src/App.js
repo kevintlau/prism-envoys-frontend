@@ -20,7 +20,7 @@ export default function App() {
   });
   // state used to store characters on character select
   const [charState, setCharState] = useState({
-    characters: { data: [] },
+    characters: [],
     newChar: {
       name: "",
       race: "Human",
@@ -37,8 +37,7 @@ export default function App() {
     Welcome: <Welcome />,
     CharacterSelect: (
       <CharacterSelect
-        chars={charState.characters.data}
-        newChar={charState.newChar}
+        charState={charState}
         setCharState={setCharState}
         userState={userState}
         playerState={playerState}
@@ -59,10 +58,10 @@ export default function App() {
     const getAppData = async () => {
       if (!userState.user) return;
       try {
-        const characters = await fetchChars(userState.user.uid);
+        const charactersData = await fetchChars(userState.user.uid);
         setCharState((prevState) => ({
           ...prevState,
-          characters,
+          characters: charactersData.data,
         }));
       } catch (error) {
         console.error(error);

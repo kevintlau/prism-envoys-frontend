@@ -7,11 +7,13 @@ import {
 } from "../../services/char-service";
 
 // props:
-//   chars, newChar, setCharState,
+//   charState, setCharState,
 //   userState,
 //   playerState, setPlayerState
 
 export default function CharacterSelect(props) {
+  const newChar = props.charState.newChar;
+
   // create the new character form using controlled components
   const handleChange = (evt) => {
     props.setCharState((prevState) => ({
@@ -27,18 +29,18 @@ export default function CharacterSelect(props) {
     if (!props.userState.user) return;
     evt.preventDefault();
     // populate new character object with stats and user id
-    const startingStats = generateStats(props.newChar.class);
-    let newChar = {
-      ...props.newChar,
+    const startingStats = generateStats(newChar.class);
+    let submittedChar = {
+      ...newChar,
       ...startingStats,
       uid: props.userState.user.uid,
     };
     // create new character in database
     try {
-      const createdChar = await createChar(newChar);
+      const createdChar = await createChar(submittedChar);
       props.setCharState((prevState) => ({
         ...prevState,
-        characters: { data: [...prevState.characters.data, createdChar] },
+        characters: [ ...prevState.characters, createdChar ],
         // reset new character form
         newChar: {
           name: "",
@@ -54,11 +56,14 @@ export default function CharacterSelect(props) {
   const handleSelect = async (charId) => {
     if (!props.userState.user) return;
     try {
-      const character = await selectChar(charId, props.userState.user.uid);
-      props.setPlayerState((prevState) => ({
-        ...prevState,
-        character,
-      }));
+      const characterData = await selectChar(charId, props.userState.user.uid);
+      // console.log(props.playerState);
+      // console.log(characterData.data);
+      props.setPlayerState({ character: characterData.data, });
+      // props.setPlayerState((prevState) => ({
+      //   ...prevState,
+      //   character: characterData.data,
+      // }));
     } catch (error) {
       console.error(error);
     }
@@ -67,10 +72,10 @@ export default function CharacterSelect(props) {
   const handleDelete = async (charId) => {
     if (!props.userState.user) return;
     try {
-      const characters = await deleteChar(charId, props.userState.user.uid);
+      const charactersData = await deleteChar(charId, props.userState.user.uid);
       props.setCharState((prevState) => ({
         ...prevState,
-        characters,
+        characters: charactersData.data,
       }));
     } catch (error) {
       console.error(error);
@@ -82,7 +87,7 @@ export default function CharacterSelect(props) {
     <div className="char-select">
       <h2>Character Select</h2>
       <div className="char-list">
-        {props.chars.map((char, idx) => (
+        {props.charState.characters.map((char, idx) => (
           <article className="char" key={idx}>
             <p>Character {idx + 1}</p>
             <p>Name: {char.name}</p>
@@ -100,14 +105,14 @@ export default function CharacterSelect(props) {
               type="text"
               name="name"
               id="name"
-              value={props.newChar.name}
+              value={newChar.name}
               onChange={handleChange}
             />
             <label htmlFor="race">Race:</label>
             <select
               name="race"
               id="race"
-              value={props.newChar.race}
+              value={newChar.race}
               onChange={handleChange}
             >
               <option value="Human">Human</option>
@@ -119,7 +124,7 @@ export default function CharacterSelect(props) {
             <select
               name="class"
               id="class"
-              value={props.newChar.class}
+              value={newChar.class}
               onChange={handleChange}
             >
               <option value="Crusader">Crusader (durable fighter)</option>
