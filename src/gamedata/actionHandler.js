@@ -12,10 +12,10 @@ export default function handleAction(
 ) {
   // helper function to handle combat steps
   function handleCombat(move, damageToEnemy) {
-    const damageToCharacter = enemy.atk - character.def;
+    let damageToCharacter = enemy.atk - character.def;
+    if (damageToCharacter < 1) damageToCharacter = 1;
     const newEnemyHealth = enemy.currentHp - damageToEnemy;
     const newCharacterHealth = character.currentHp - damageToCharacter;
-    const enemyAtk = enemy.atk;
     if (newEnemyHealth <= 0) {
       setResultState(`
         Your ${move} hits the ${enemy.name} for ${damageToEnemy} damage. 
@@ -23,10 +23,20 @@ export default function handleAction(
       `);
       setPlayerState((prevState) => ({
         ...prevState,
-        xp: prevState.xp + enemy.xp,
+        character: {
+          ...prevState.character,
+          xp: prevState.character.xp + enemy.xp,
+        },
       }));
       setEnemyState(null);
     } else if (newCharacterHealth <= 0) {
+      setPlayerState((prevState) => ({
+        ...prevState,
+        character: {
+          ...prevState.character,
+          currentHp: 0,
+        },
+      }));
       setResultState(`
         The ${enemy.name} hits you for ${damageToCharacter} damage. 
         You are defeated.
@@ -38,7 +48,10 @@ export default function handleAction(
       }));
       setPlayerState((prevState) => ({
         ...prevState,
-        currentHp: prevState.currentHp - damageToCharacter,
+        character: {
+          ...prevState.character,
+          currentHp: prevState.character.currentHp - damageToCharacter,
+        },
       }));
       setResultState(`
         Your ${move} hits the ${enemy.name} for ${damageToEnemy} damage! 
@@ -185,13 +198,39 @@ export default function handleAction(
         `);
       }
       break;
+    case ACTIONS[location].EAT_FRUIT:
+      if (location === LOCATIONS.GLIMMER_PLAINS) {
+        let overflowHp = character.currentHp + 1 > character.maxHp;
+        let overflowMp = character.currentMp + 1 > character.maxMp;
+        setPlayerState((prevState) => ({
+          ...prevState,
+          character: {
+            ...prevState.character,
+            currentHp: overflowHp
+              ? prevState.character.maxHp
+              : prevState.character.currentHp + 1,
+            currentMp: overflowMp
+              ? prevState.character.maxMp
+              : prevState.character.currentMp + 1,
+          },
+        }));
+        setResultState(`
+            You pick an apple from a nearby tree and take a bite.
+            You feel immediately invigorated.
+            Your HP and MP have recovered by 1!
+        `);
+      }
+      break;
 
     // ----- TALK ACTIONS -----------------------------------------------------
     case ACTIONS[location].TALKTO_ADVENTURER:
       if (location === LOCATIONS.GLIMMER_PLAINS) {
         setPlayerState((prevState) => ({
           ...prevState,
-          character: { ...prevState.character, xp: prevState.character.xp + 1 },
+          character: {
+            ...prevState.character,
+            xp: prevState.character.xp + 1,
+          },
         }));
         setResultState(`
           You see a fellow adventurer and ask them about the surrounding area.
@@ -199,6 +238,7 @@ export default function handleAction(
           You gained 1 XP!
         `);
       }
+      break;
 
     // ----- ENGAGE ACTIONS ---------------------------------------------------
     case ACTIONS[location].ENGAGE_BEAR:
@@ -232,8 +272,15 @@ export default function handleAction(
       break;
     case BATTLE_ACTIONS[character.class].SPELL:
       if (character.mp < 4) return;
-      setPlayerState((prevState) => ({ ...prevState, mp: prevState.mp - 4 }));
-      handleCombat(BATTLE_ACTIONS[character.class].SPELL, character.atk * 2);
+      setPlayerState((prevState) => ({
+        ...prevState,
+        character: {
+          ...prevState.character,
+          currentMp: prevState.character.currentMp - 4,
+        },
+      }));
+      const skillName = BATTLE_ACTIONS[character.class].SPELL.split(",")[0];
+      handleCombat(skillName, character.atk * 2);
       break;
   }
 }

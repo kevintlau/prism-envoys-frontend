@@ -1,7 +1,7 @@
 // import methods
 import { useState, useEffect } from "react";
 import { auth } from "./services/firebase";
-import { fetchChars } from "./services/char-service";
+import { fetchChars } from "./services/char-backend-service";
 
 // import stylesheets
 import "./App.css";

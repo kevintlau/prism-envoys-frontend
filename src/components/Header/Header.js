@@ -11,7 +11,7 @@ export default function Header(props) {
 
   // generate a username for greeting, based on user's email
   const email = props.user ? props.user.email : "";
-  const username = email.substring(0, email.indexOf("@"));
+  const username = email.split("@")[0];
 
   return (
     <header className="header">

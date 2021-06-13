@@ -2,7 +2,6 @@ import "./Game.css";
 import PlayerPanel from "../PlayerPanel/PlayerPanel";
 import ActionsPanel from "../ActionsPanel/ActionsPanel";
 import StatusPanel from "../StatusPanel/StatusPanel";
-import generateActions from "../../gamedata/actions";
 import { useState } from "react";
 
 export default function Game(props) {
@@ -27,7 +26,12 @@ export default function Game(props) {
         setEnemyState={setEnemyState}
         setResultState={setResultState}
       />
-      <StatusPanel resultState={resultState} enemy={enemyState} />
+      <StatusPanel
+        userState={props.userState}
+        resultState={resultState}
+        enemy={enemyState}
+        character={character}
+      />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import {
   createChar,
   selectChar,
   deleteChar,
-} from "../../services/char-service";
+} from "../../services/char-backend-service";
 
 // props:
 //   charState, setCharState,
@@ -40,7 +40,7 @@ export default function CharacterSelect(props) {
       const createdChar = await createChar(submittedChar);
       props.setCharState((prevState) => ({
         ...prevState,
-        characters: [ ...prevState.characters, createdChar ],
+        characters: [ ...prevState.characters, createdChar.data ],
         // reset new character form
         newChar: {
           name: "",

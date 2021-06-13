@@ -1,6 +1,8 @@
 import "./StatusPanel.css";
+import { deleteChar } from "../../services/char-backend-service";
 
 export default function StatusPanel(props) {
+
   return (
     <div className="status-panel">
       <p>Status Panel</p>
