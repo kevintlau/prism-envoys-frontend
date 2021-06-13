@@ -1,5 +1,4 @@
 import "./ActionsPanel.css";
-import generateActions from "../../gamedata/actions";
 import handleAction from "../../gamedata/actionHandler";
 
 export default function ActionsPanel(props) {

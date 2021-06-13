@@ -84,6 +84,9 @@ export default function generateActions(inBattle, playerClass, location) {
           ...movementActionEntries,
         ];
         break;
+      default:
+        alert("Invalid location detected - Go back to Gleam Town.");
+        actions = [["GOTO_GLEAM_TOWN", "Go to Gleam Town"]];
     }
     return actions;
   }

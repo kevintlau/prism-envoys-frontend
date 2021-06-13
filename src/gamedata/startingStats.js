@@ -49,6 +49,8 @@ export default function generateStats(charClass) {
       return { ...BASE_STATS, ...INQUISITOR_STATS };
     case "Shepherd":
       return { ...BASE_STATS, ...SHEPHERD_STATS };
+    default:
+      return BASE_STATS;
   }
 };
 
