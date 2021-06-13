@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3001/api/characters";
+const BASE_URL = "https://prism-envoys-backend.herokuapp.com/api/characters";
 
 const fetchChars = (userId) => {
   return axios.get(`${BASE_URL}?uid=${userId}`);
