@@ -19,6 +19,7 @@ export default function PlayerPanel(props) {
     }
   };
 
+  // same as handleDelete function in 
   const handleDie = async (charId) => {
     if (!props.userState.user) return;
     try {

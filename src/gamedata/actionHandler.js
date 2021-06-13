@@ -1,5 +1,9 @@
 import ENEMIES from "./enemies";
-import { ACTIONS, MOVEMENT_ACTIONS, BATTLE_ACTIONS } from "./actions";
+import generateActions, {
+  ACTIONS,
+  MOVEMENT_ACTIONS,
+  BATTLE_ACTIONS,
+} from "./actions";
 import LOCATIONS from "./locations";
 
 export default function handleAction(
@@ -8,7 +12,8 @@ export default function handleAction(
   setPlayerState,
   enemy,
   setEnemyState,
-  setResultState
+  setResultState,
+  setActionsState
 ) {
   // helper function to handle combat steps
   function handleCombat(move, damageToEnemy) {
@@ -17,18 +22,20 @@ export default function handleAction(
     const newEnemyHealth = enemy.currentHp - damageToEnemy;
     const newCharacterHealth = character.currentHp - damageToCharacter;
     if (newEnemyHealth <= 0) {
+      const xpGain = enemy.xp;
       setResultState(`
         Your ${move} hits the ${enemy.name} for ${damageToEnemy} damage. 
-        You defeated the ${enemy.name}!
+        You defeated the ${enemy.name} and gained ${xpGain} XP!
       `);
       setPlayerState((prevState) => ({
         ...prevState,
         character: {
           ...prevState.character,
-          xp: prevState.character.xp + enemy.xp,
+          xp: prevState.character.xp + xpGain,
         },
       }));
       setEnemyState(null);
+      enemy = null;
     } else if (newCharacterHealth <= 0) {
       setPlayerState((prevState) => ({
         ...prevState,
@@ -60,7 +67,7 @@ export default function handleAction(
     }
   }
 
-  const location = character.location;
+  let location = character.location;
 
   switch (action) {
     // ----- MOVEMENT ACTIONS -------------------------------------------------
@@ -70,6 +77,7 @@ export default function handleAction(
         character: { ...prevState.character, location: "Gleam Town" },
       }));
       setResultState("You traveled to Gleam Town.");
+      location = "Gleam Town";
       break;
     case MOVEMENT_ACTIONS[location].GOTO_GLIMMER_PLAINS:
       setPlayerState((prevState) => ({
@@ -77,12 +85,15 @@ export default function handleAction(
         character: { ...prevState.character, location: "Glimmer Plains" },
       }));
       setResultState("You traveled to Glimmer Plains.");
+      location = "Glimmer Plains";
       break;
     case MOVEMENT_ACTIONS[location].GOTO_SHADE_CAVE:
       setResultState(`
         You find a sign at the entrace of the cave. It reads:
         "Cave closed off due to earthquake. Come back later."
       `);
+      // WIP - Shade Cave not implemented
+      // location = "Shade Cave";
       break;
 
     // ----- BASIC ACTIONS ----------------------------------------------------
@@ -242,6 +253,7 @@ export default function handleAction(
 
     // ----- ENGAGE ACTIONS ---------------------------------------------------
     case ACTIONS[location].ENGAGE_BEAR:
+      enemy = true;
       setEnemyState(ENEMIES[location].BEAR);
       setResultState(`
         You walk up to a bear and poke it with a stick. The bear keeps sleeping.
@@ -250,6 +262,7 @@ export default function handleAction(
       `);
       break;
     case ACTIONS[location].ENGAGE_OGRE:
+      enemy = true;
       setEnemyState(ENEMIES[location].OGRE);
       setResultState(`
         You walk up to an ogre and make some threatening gestures.
@@ -259,6 +272,7 @@ export default function handleAction(
       `);
       break;
     case ACTIONS[location].ENGAGE_GOBLIN:
+      enemy = true;
       setEnemyState(ENEMIES[location].GOBLIN);
       setResultState(`
         You see a goblin and approach it. It doesn't seem too happy to see you.
@@ -282,5 +296,10 @@ export default function handleAction(
       const skillName = BATTLE_ACTIONS[character.class].SPELL.split(",")[0];
       handleCombat(skillName, character.atk * 2);
       break;
+    
+    // ----- DEFAULT CASE -----------------------------------------------------
+    default:
+      setResultState("Invalid input detected. Please try again.");
   }
+  setActionsState(generateActions(enemy, character.class, location));
 }
