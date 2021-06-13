@@ -83,15 +83,9 @@ export default function App() {
     <>
       <Header user={userState.user} setPlayerState={setPlayerState} />
       {/* render app based on whether user's status */}
-      {!userState.user // not logged in
-        ? componentsObj.Welcome
-        : ""}
-      {userState.user && !playerState.character // logged in but not in game
-        ? componentsObj.CharacterSelect
-        : ""}
-      {userState.user && playerState.character // logged in and in game
-        ? componentsObj.Game
-        : ""}
+      {!userState.user && componentsObj.Welcome}
+      {userState.user && !playerState.character && componentsObj.CharacterSelect}
+      {userState.user && playerState.character && componentsObj.Game}
     </>
   );
 }

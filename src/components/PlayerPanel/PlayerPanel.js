@@ -19,7 +19,7 @@ export default function PlayerPanel(props) {
     }
   };
 
-  // same as handleDelete function in 
+  // same as handleDelete function in
   const handleDie = async (charId) => {
     if (!props.userState.user) return;
     try {
@@ -52,15 +52,12 @@ export default function PlayerPanel(props) {
       <p>ATK: {character.atk}</p>
       <p>DEF: {character.def}</p>
       <p>Location: {character.location}</p>
-      {props.character.currentHp <= 0 ? (
+      {props.character.currentHp <= 0 && (
         <button onClick={() => handleDie(props.character._id)}>
           Delete and Exit
         </button>
-      ) : !props.enemy ? (
-        <button onClick={handleSave}>Save and Exit</button>
-      ) : (
-        ""
       )}
+      {!props.enemy && <button onClick={handleSave}>Save and Exit</button>}
     </div>
   );
 }
