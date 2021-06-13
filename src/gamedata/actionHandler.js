@@ -1,5 +1,5 @@
 import ENEMIES from "./enemies";
-import ACTIONS from "./actions";
+import { ACTIONS, MOVEMENT_ACTIONS, BATTLE_ACTIONS } from "./actions";
 import LOCATIONS from "./locations";
 
 export default function handleAction(
@@ -11,15 +11,15 @@ export default function handleAction(
   setResultState
 ) {
   // helper function to handle combat steps
-  function handleCombat(damageToEnemy) {
+  function handleCombat(move, damageToEnemy) {
+    const damageToCharacter = enemy.atk - character.def;
     const newEnemyHealth = enemy.currentHp - damageToEnemy;
-    const newCharacterHealth = character.currentHp - enemy.atk;
-    const enemy = enemy.name;
+    const newCharacterHealth = character.currentHp - damageToCharacter;
     const enemyAtk = enemy.atk;
     if (newEnemyHealth <= 0) {
       setResultState(`
-        You hit the ${enemy} for ${damageToEnemy} damage. 
-        You defeated the ${enemy}!
+        Your ${move} hits the ${enemy.name} for ${damageToEnemy} damage. 
+        You defeated the ${enemy.name}!
       `);
       setPlayerState((prevState) => ({
         ...prevState,
@@ -28,7 +28,7 @@ export default function handleAction(
       setEnemyState(null);
     } else if (newCharacterHealth <= 0) {
       setResultState(`
-        The ${enemy} hits you for ${enemyAtk} damage. 
+        The ${enemy.name} hits you for ${damageToCharacter} damage. 
         You are defeated.
       `);
     } else {
@@ -38,11 +38,11 @@ export default function handleAction(
       }));
       setPlayerState((prevState) => ({
         ...prevState,
-        currentHp: prevState.currentHp - enemyAtk,
+        currentHp: prevState.currentHp - damageToCharacter,
       }));
       setResultState(`
-        You hit the ${enemy} for ${damageToEnemy} damage! 
-        The ${enemy} hits you for ${enemyAtk} damage!
+        Your ${move} hits the ${enemy.name} for ${damageToEnemy} damage! 
+        The ${enemy.name} hits you for ${damageToCharacter} damage!
       `);
     }
   }
@@ -50,25 +50,30 @@ export default function handleAction(
   const location = character.location;
 
   switch (action) {
-    case "GOTO_GLEAM_TOWN":
+    // ----- MOVEMENT ACTIONS -------------------------------------------------
+    case MOVEMENT_ACTIONS[location].GOTO_GLEAM_TOWN:
       setPlayerState((prevState) => ({
         ...prevState,
         character: { ...prevState.character, location: "Gleam Town" },
       }));
+      setResultState("You traveled to Gleam Town.");
       break;
-    case "GOTO_GLIMMER_PLAINS":
+    case MOVEMENT_ACTIONS[location].GOTO_GLIMMER_PLAINS:
       setPlayerState((prevState) => ({
         ...prevState,
         character: { ...prevState.character, location: "Glimmer Plains" },
       }));
+      setResultState("You traveled to Glimmer Plains.");
       break;
-    case "GOTO_SHADE_CAVE":
+    case MOVEMENT_ACTIONS[location].GOTO_SHADE_CAVE:
       setResultState(`
         You find a sign at the entrace of the cave. It reads:
         "Cave closed off due to earthquake. Come back later."
       `);
       break;
-    case "REFINE_WEAPON":
+
+    // ----- BASIC ACTIONS ----------------------------------------------------
+    case ACTIONS[location].REFINE_WEAPON:
       if (location === LOCATIONS.GLEAM_TOWN) {
         setPlayerState((prevState) => ({
           ...prevState,
@@ -77,6 +82,11 @@ export default function handleAction(
             atk: prevState.character.atk + 2,
           },
         }));
+        setResultState(`
+          The blacksmith hammers your weapon three times, and...
+          SUCCESS!~
+          Your ATK has increased by 2!
+        `);
       }
       if (location === LOCATIONS.GLIMMER_PLAINS) {
         setPlayerState((prevState) => ({
@@ -86,9 +96,15 @@ export default function handleAction(
             atk: prevState.character.atk + 1,
           },
         }));
+        setResultState(`
+          You find a rough stone on the ground.
+          You start to rub it against your weapon, and...
+          SUCCESS!~
+          Your ATK has increased by 1!
+        `);
       }
       break;
-    case "REFINE_ARMOR":
+    case ACTIONS[location].REFINE_ARMOR:
       if (location === LOCATIONS.GLEAM_TOWN) {
         setPlayerState((prevState) => ({
           ...prevState,
@@ -97,9 +113,14 @@ export default function handleAction(
             def: prevState.character.def + 1,
           },
         }));
+        setResultState(`
+          The blacksmith hammers your armor three times, and...
+          SUCCESS!~
+          Your DEF has increased by 1!
+        `);
       }
       break;
-    case "REST":
+    case ACTIONS[location].REST:
       if (location === LOCATIONS.GLEAM_TOWN) {
         setPlayerState((prevState) => ({
           ...prevState,
@@ -108,6 +129,10 @@ export default function handleAction(
             currentHp: prevState.character.maxHp,
           },
         }));
+        setResultState(`
+          You stop by the inn and take a long nap.
+          Your HP has recovered fully!
+        `);
       }
       if (location === LOCATIONS.GLIMMER_PLAINS) {
         let overflow = character.currentHp + 3 > character.maxHp;
@@ -120,9 +145,14 @@ export default function handleAction(
               : prevState.character.currentHp + 3,
           },
         }));
+        setResultState(`
+          You find an inviting patch of grass in the shade beneath a large tree.
+          You take a quick rest and patch your wounds.
+          Your HP has recovered by 3!
+        `);
       }
       break;
-    case "MEDITATE":
+    case ACTIONS[location].MEDITATE:
       if (location === LOCATIONS.GLEAM_TOWN) {
         setPlayerState((prevState) => ({
           ...prevState,
@@ -131,6 +161,11 @@ export default function handleAction(
             currentMp: prevState.character.maxMp,
           },
         }));
+        setResultState(`
+          You walk into the Prism temple to the altar.
+          You close your eyes and clasp your hands. Your mind clears.
+          Your MP has recovered fully!
+        `);
       }
       if (location === LOCATIONS.GLIMMER_PLAINS) {
         let overflow = character.currentMp + 3 > character.maxMp;
@@ -143,23 +178,62 @@ export default function handleAction(
               : prevState.character.currentMp + 3,
           },
         }));
+        setResultState(`
+          You sit down on a rock, close your eyes, and clasp your hands.
+          Your focus comes back slowly.
+          Your MP has recovered by 3!
+        `);
       }
       break;
-    case ACTIONS.TALK_TO_ADVENTURER:
+
+    // ----- TALK ACTIONS -----------------------------------------------------
+    case ACTIONS[location].TALKTO_ADVENTURER:
       if (location === LOCATIONS.GLIMMER_PLAINS) {
-        setPlayerState((prevState) => ({ ...prevState, xp: prevState.xp + 1 }));
+        setPlayerState((prevState) => ({
+          ...prevState,
+          character: { ...prevState.character, xp: prevState.character.xp + 1 },
+        }));
+        setResultState(`
+          You see a fellow adventurer and ask them about the surrounding area.
+          They tell you about a new way to block ogre attacks.
+          You gained 1 XP!
+        `);
       }
-    case ACTIONS.POKE_BEAR:
-      setEnemyState(ENEMIES.BEAR);
-      setResultState("The bear wakes up!");
+
+    // ----- ENGAGE ACTIONS ---------------------------------------------------
+    case ACTIONS[location].ENGAGE_BEAR:
+      setEnemyState(ENEMIES[location].BEAR);
+      setResultState(`
+        You walk up to a bear and poke it with a stick. The bear keeps sleeping.
+        Angrily, you throw a rock at the bear and hit it.
+        The bear wakes up!
+      `);
       break;
-    case ACTIONS.ATTACK:
-      handleCombat(character.atk);
+    case ACTIONS[location].ENGAGE_OGRE:
+      setEnemyState(ENEMIES[location].OGRE);
+      setResultState(`
+        You walk up to an ogre and make some threatening gestures.
+        Even though it doesn't know your language, some actions are just 
+          universally understood.
+        The ogre approaches you!
+      `);
       break;
-    case ACTIONS.SPELL:
+    case ACTIONS[location].ENGAGE_GOBLIN:
+      setEnemyState(ENEMIES[location].GOBLIN);
+      setResultState(`
+        You see a goblin and approach it. It doesn't seem too happy to see you.
+        The goblin gets ready to fight!
+      `);
+      break;
+
+    // ----- BATTLE ACTIONS ---------------------------------------------------
+    case BATTLE_ACTIONS[character.class].ATTACK:
+      handleCombat(BATTLE_ACTIONS[character.class].ATTACK, character.atk);
+      break;
+    case BATTLE_ACTIONS[character.class].SPELL:
       if (character.mp < 4) return;
       setPlayerState((prevState) => ({ ...prevState, mp: prevState.mp - 4 }));
-      handleCombat(character.atk * 2);
+      handleCombat(BATTLE_ACTIONS[character.class].SPELL, character.atk * 2);
       break;
   }
 }

@@ -4,7 +4,7 @@ import handleAction from "../../gamedata/actionHandler";
 
 export default function ActionsPanel(props) {
   const actions = generateActions(
-    props.enemyState,
+    props.enemy,
     props.character.class,
     props.character.location
   );
@@ -14,15 +14,18 @@ export default function ActionsPanel(props) {
       {actions.map((action, idx) => (
         <button
           key={idx}
-          onClick={() =>
+          onClick={() => {
+            console.log(action[1]);
             handleAction(
-              action[0],
+              action[1],
               props.character,
               props.setPlayerState,
               props.enemy,
               props.setEnemyState,
               props.setResultState
-            )
+            );
+          }
+            
           }
         >
           {action[1]}
