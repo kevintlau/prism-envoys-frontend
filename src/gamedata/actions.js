@@ -12,13 +12,13 @@ export const ACTIONS = {
     MEDITATE: "Pray at the Prism altar",
   },
   [LOCATIONS.GLIMMER_PLAINS]: {
-    SEARCH_ORE: "Search for ore nearby",
-    MINE_ROCKS: "Mine nearby rocks for ore",
+    // SEARCH_ORE: "Search for ore nearby",
+    // MINE_ROCKS: "Mine nearby rocks for ore",
     ENGAGE_GOBLIN: "Approach a goblin in a camp",
     ENGAGE_OGRE: "Make threatening gestures at an ogre",
     ENGAGE_BEAR: "Poke a sleeping bear under a tree",
     TALKTO_ADVENTURER: "Talk to an adventurer passing by",
-    TALKTO_MERCHANT: "Talk to a merchant passing by",
+    // TALKTO_MERCHANT: "Talk to a merchant passing by",
     REFINE_WEAPON: "Pick up a rock on the ground",
     EAT_FRUIT: "Pick an apple and take a bite",
     REST: "Take a quick rest",
@@ -44,17 +44,17 @@ export const BATTLE_ACTIONS = {
   [CLASSES.CRUSADER]: {
     ATTACK: "Guarded Slash",
     SPELL: "Faithful Strike, Cost: 4 MP",
-    FLEE: "Flee, 50% chance",
+    // FLEE: "Flee, 50% chance",
   },
   [CLASSES.INQUISITOR]: {
     ATTACK: "Accurate Shot",
     SPELL: "Argent Barrage, Cost: 4 MP",
-    FLEE: "Flee, 50% chance",
+    // FLEE: "Flee, 50% chance",
   },
   [CLASSES.SHEPHERD]: {
     ATTACK: "Brilliant Flash",
     SPELL: "Eminence, Cost: 4 MP",
-    FLEE: "Flee, 50% chance",
+    // FLEE: "Flee, 50% chance",
   },
 };
 
