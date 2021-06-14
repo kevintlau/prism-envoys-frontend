@@ -3,3 +3,8 @@ article.char, div.char-form {
   margin: 10px;
   max-width: 30%;
 }
+
+.char-select {
+  font-family: "Titillium Web", Sans-Serif;
+  font-size: 16px;
+}
