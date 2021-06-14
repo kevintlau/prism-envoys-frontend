@@ -8,3 +8,8 @@
 .main {
   flex-grow: 1;
 }
+
+.card {
+  background-color: rgb(245, 245, 245);
+  border: 1px solid black;
+}

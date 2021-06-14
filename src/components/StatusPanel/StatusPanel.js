@@ -27,7 +27,7 @@ export default function StatusPanel(props) {
         </Row>
       )}
       <Row>
-        <Col>
+        <Col className="mb-4">
           <Card body>
             <CardText>{props.resultState}</CardText>
           </Card>
