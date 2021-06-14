@@ -5,6 +5,19 @@ import {
   selectChar,
   deleteChar,
 } from "../../services/char-backend-service";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Card,
+  CardTitle,
+  CardText,
+} from "reactstrap";
 
 // props:
 //   charState, setCharState,
@@ -40,7 +53,7 @@ export default function CharacterSelect(props) {
       const createdChar = await createChar(submittedChar);
       props.setCharState((prevState) => ({
         ...prevState,
-        characters: [ ...prevState.characters, createdChar.data ],
+        characters: [...prevState.characters, createdChar.data],
         // reset new character form
         newChar: {
           name: "",
@@ -82,56 +95,109 @@ export default function CharacterSelect(props) {
   // JSX component
   return (
     <div className="char-select">
-      <h2>Character Select</h2>
-      <div className="char-list">
-        {props.charState.characters.map((char, idx) => (
-          <article className="char" key={idx}>
-            <p>Character {idx + 1}</p>
-            <p>Name: {char.name}</p>
-            <p>Level {char.level} {char.race} {char.class}</p>
-            <p>Location: {char.location}</p>
-            <button onClick={() => handleSelect(char._id)}>Play</button>
-            <button onClick={() => handleDelete(char._id)}>Delete</button>
-          </article>
-        ))}
-        <article className="char-form">
-          <h4>Create New Character</h4>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={newChar.name}
-              onChange={handleChange}
-            />
-            <label htmlFor="race">Race:</label>
-            <select
-              name="race"
-              id="race"
-              value={newChar.race}
-              onChange={handleChange}
-            >
-              <option value="Human">Human</option>
-              <option value="Giant">Giant</option>
-              <option value="Elf">Elf</option>
-              <option value="Dwarf">Dwarf</option>
-            </select>
-            <label htmlFor="class">Class:</label>
-            <select
-              name="class"
-              id="class"
-              value={newChar.class}
-              onChange={handleChange}
-            >
-              <option value="Crusader">Crusader (durable fighter)</option>
-              <option value="Inquisitor">Inquisitor (accurate ranger)</option>
-              <option value="Shepherd">Shepherd (powerful caster)</option>
-            </select>
-            <button disabled={!props.userState.user}>Create character</button>
-          </form>
-        </article>
-      </div>
+      <Container>
+        <Row>
+          <Col>
+            <h3 className="text-center my-4">Character Select</h3>
+          </Col>
+        </Row>
+        <Row className="char-list">
+          {props.charState.characters.map((char, idx) => (
+            <Col sm="4" className="mb-4">
+              <Card body key={idx}>
+                <CardTitle tag="h5" className="mb-2">
+                  {char.name}
+                </CardTitle>
+                <CardText className="mb-1">
+                  Level {char.level} {char.race} {char.class}
+                </CardText>
+                <CardText className="mb-2">Location: {char.location}</CardText>
+                <Row>
+                  <Col>
+                    <Button
+                      className="w-100"
+                      color="primary"
+                      onClick={() => handleSelect(char._id)}
+                    >
+                      Play
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      className="w-100"
+                      color="danger"
+                      onClick={() => handleDelete(char._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          ))}
+
+          <Col sm="4">
+            <Card body>
+            <CardTitle tag="h5" className="mb-2">
+                  Create New Character
+                </CardTitle>
+                <Form onSubmit={handleSubmit}>
+                  <FormGroup>
+                    <Label htmlFor="name">Name:</Label>
+                    <Input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value={newChar.name}
+                      onChange={handleChange}
+                      className="mb-2"
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label htmlFor="race">Race:</Label>
+                    <Input
+                      type="select"
+                      name="race"
+                      id="race"
+                      value={newChar.race}
+                      onChange={handleChange}
+                      className="mb-2"
+                    >
+                      <option value="Human">Human</option>
+                      <option value="Giant">Giant</option>
+                      <option value="Elf">Elf</option>
+                      <option value="Dwarf">Dwarf</option>
+                    </Input>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label htmlFor="class">Class:</Label>
+                    <Input
+                      type="select"
+                      name="class"
+                      id="class"
+                      value={newChar.class}
+                      onChange={handleChange}
+                      className="mb-3"
+                    >
+                      <option value="Crusader">
+                        Crusader (durable fighter)
+                      </option>
+                      <option value="Inquisitor">
+                        Inquisitor (agile ranger)
+                      </option>
+                      <option value="Shepherd">
+                        Shepherd (powerful caster)
+                      </option>
+                    </Input>
+                  </FormGroup>
+                  <Button color="success" disabled={!props.userState.user}>
+                    Create character
+                  </Button>
+                </Form>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }

@@ -1,4 +1,12 @@
 import "./Header.css";
+import {
+  Navbar,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  NavbarText,
+} from "reactstrap";
 import { login, logout } from "../../services/firebase";
 
 export default function Header(props) {
@@ -13,24 +21,24 @@ export default function Header(props) {
   const username = props.user ? props.user.email.split("@")[0] : "";
 
   return (
-    <header className="header">
-      <h1 onClick={handleTitleClick}>Prism Envoys</h1>
-      <nav>
-        <ul>
+    <div>
+      <Navbar color="light" light expand="md">
+        <NavbarBrand onClick={handleTitleClick}>Prism Envoys</NavbarBrand>
+        <Nav className="ml-auto" navbar>
           {props.user ? (
             <>
-              <li>Welcome, {username}</li>
-              <li className="navLink" onClick={logout}>
-                Logout
-              </li>
+              <NavbarText>Welcome, {username}</NavbarText>
+              <NavItem>
+                <NavLink onClick={logout}>Logout</NavLink>
+              </NavItem>
             </>
           ) : (
-            <li className="navLink" onClick={login}>
-              Login
-            </li>
+            <NavItem>
+              <NavLink onClick={login}>Login</NavLink>
+            </NavItem>
           )}
-        </ul>
-      </nav>
-    </header>
+        </Nav>
+      </Navbar>
+    </div>
   );
 }

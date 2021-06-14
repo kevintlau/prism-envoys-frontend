@@ -1,5 +1,6 @@
 import "./PlayerPanel.css";
 import { saveChar, deleteChar } from "../../services/char-backend-service";
+import { Container, Row, Col } from "reactstrap";
 
 export default function PlayerPanel(props) {
   const character = props.character;
@@ -35,7 +36,8 @@ export default function PlayerPanel(props) {
   };
 
   return (
-    <div className="player-panel">
+    
+    <Container className="player-panel">
       <p>
         <span style={{ fontWeight: "bold" }}>{character.name}</span>,{" "}
         {character.race} {character.class}
@@ -58,6 +60,6 @@ export default function PlayerPanel(props) {
         </button>
       )}
       {!props.enemy && <button onClick={handleSave}>Save and Exit</button>}
-    </div>
+    </Container>
   );
 }

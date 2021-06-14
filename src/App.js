@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { auth } from "./services/firebase";
 import { fetchChars } from "./services/char-backend-service";
+import { Container, Row, Col } from "reactstrap";
 
 // import stylesheets
 import "./App.css";
@@ -82,10 +83,18 @@ export default function App() {
   return (
     <>
       <Header user={userState.user} setPlayerState={setPlayerState} />
-      {/* render app based on whether user's status */}
-      {!userState.user && componentsObj.Welcome}
-      {userState.user && !playerState.character && componentsObj.CharacterSelect}
-      {userState.user && playerState.character && componentsObj.Game}
+      <Container>
+        <Row>
+          <Col>
+            {/* render app based on whether user's status */}
+            {!userState.user && componentsObj.Welcome}
+            {userState.user &&
+              !playerState.character &&
+              componentsObj.CharacterSelect}
+            {userState.user && playerState.character && componentsObj.Game}
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }
