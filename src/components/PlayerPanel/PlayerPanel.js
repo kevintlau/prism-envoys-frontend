@@ -1,6 +1,6 @@
 import "./PlayerPanel.css";
 import { saveChar, deleteChar } from "../../services/char-backend-service";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Card, CardText, Button } from "reactstrap";
 
 export default function PlayerPanel(props) {
   const character = props.character;
@@ -36,30 +36,60 @@ export default function PlayerPanel(props) {
   };
 
   return (
-    
     <Container className="player-panel">
-      <p>
-        <span style={{ fontWeight: "bold" }}>{character.name}</span>,{" "}
-        {character.race} {character.class}
-      </p>
-      <p>
-        Level: {character.level} | XP: {character.xp}
-      </p>
-      <p>
-        HP: {character.currentHp} / {character.maxHp}
-      </p>
-      <p>
-        MP: {character.currentMp} / {character.maxMp}
-      </p>
-      <p>ATK: {character.atk}</p>
-      <p>DEF: {character.def}</p>
-      <p>Location: {character.location}</p>
-      {props.character.currentHp <= 0 && (
-        <button onClick={() => handleDie(props.character._id)}>
-          Delete and Exit
-        </button>
-      )}
-      {!props.enemy && <button onClick={handleSave}>Save and Exit</button>}
+      <Row>
+        <Col>
+          <h5 className="text-center my-4">
+            <span style={{ fontWeight: "bold" }}>{character.name}</span>,{" "}
+            {character.race} {character.class}
+          </h5>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Card body>
+            <CardText className="mb-1">
+              <strong>Level:</strong> {character.level}
+            </CardText>
+            <CardText className="mb-1">
+              <strong>Experience:</strong> {character.xp}
+            </CardText>
+            <CardText className="mb-1">
+              <strong>Health:</strong> {character.currentHp} / {character.maxHp}
+            </CardText>
+            <CardText className="mb-1">
+              <strong>Energy:</strong> {character.currentMp} / {character.maxMp}
+            </CardText>
+            <CardText className="mb-1">
+              <strong>Attack Strength:</strong> {character.atk}
+            </CardText>
+            <CardText className="mb-1">
+              <strong>Armor Rating:</strong> {character.def}
+            </CardText>
+            <CardText>
+              <strong>Location:</strong> <u>{character.location}</u>
+            </CardText>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
+          {props.character.currentHp <= 0 && (
+            <Button
+              className="w-100"
+              color="danger"
+              onClick={() => handleDie(props.character._id)}
+            >
+              Delete and Exit
+            </Button>
+          )}
+          {!props.enemy && (
+            <Button className="w-100" color="success" onClick={handleSave}>
+              Save and Exit
+            </Button>
+          )}
+        </Col>
+      </Row>
     </Container>
   );
 }
