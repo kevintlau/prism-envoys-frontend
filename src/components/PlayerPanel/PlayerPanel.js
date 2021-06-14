@@ -39,10 +39,10 @@ export default function PlayerPanel(props) {
     <Container className="player-panel">
       <Row>
         <Col>
-          <h5 className="text-center my-4">
-            <span style={{ fontWeight: "bold" }}>{character.name}</span>,{" "}
+          <h4 className="text-center my-4">
+            <strong>{character.name}</strong>,{" "}
             {character.race} {character.class}
-          </h5>
+          </h4>
         </Col>
       </Row>
       <Row>

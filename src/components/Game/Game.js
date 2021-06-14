@@ -10,7 +10,9 @@ export default function Game(props) {
   const character = props.playerState.character;
 
   const [enemyState, setEnemyState] = useState(null);
-  const [resultState, setResultState] = useState("");
+  const [resultState, setResultState] = useState(
+    "Welcome!~ You wake up from a long nap."
+  );
   const [actionsState, setActionsState] = useState(
     generateActions(false, character.class, character.location)
   );

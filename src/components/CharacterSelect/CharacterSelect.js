@@ -101,10 +101,11 @@ export default function CharacterSelect(props) {
             <h3 className="text-center my-4">Character Select</h3>
           </Col>
         </Row>
+
         <Row className="char-list">
-          {props.charState.characters.map((char, idx) => (
-            <Col sm="4" className="mb-4">
-              <Card body key={idx}>
+          {props.charState.characters.map((char) => (
+            <Col sm="4" className="mb-4" key={char._id}>
+              <Card body>
                 <CardTitle tag="h5" className="mb-2">
                   {char.name}
                 </CardTitle>
@@ -136,64 +137,60 @@ export default function CharacterSelect(props) {
             </Col>
           ))}
 
-          <Col sm="4">
+          <Col sm="4" className="mb-4">
             <Card body>
-            <CardTitle tag="h5" className="mb-2">
-                  Create New Character
-                </CardTitle>
-                <Form onSubmit={handleSubmit}>
-                  <FormGroup>
-                    <Label htmlFor="name">Name:</Label>
-                    <Input
-                      type="text"
-                      name="name"
-                      id="name"
-                      value={newChar.name}
-                      onChange={handleChange}
-                      className="mb-2"
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label htmlFor="race">Race:</Label>
-                    <Input
-                      type="select"
-                      name="race"
-                      id="race"
-                      value={newChar.race}
-                      onChange={handleChange}
-                      className="mb-2"
-                    >
-                      <option value="Human">Human</option>
-                      <option value="Giant">Giant</option>
-                      <option value="Elf">Elf</option>
-                      <option value="Dwarf">Dwarf</option>
-                    </Input>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label htmlFor="class">Class:</Label>
-                    <Input
-                      type="select"
-                      name="class"
-                      id="class"
-                      value={newChar.class}
-                      onChange={handleChange}
-                      className="mb-3"
-                    >
-                      <option value="Crusader">
-                        Crusader (durable fighter)
-                      </option>
-                      <option value="Inquisitor">
-                        Inquisitor (agile ranger)
-                      </option>
-                      <option value="Shepherd">
-                        Shepherd (powerful caster)
-                      </option>
-                    </Input>
-                  </FormGroup>
-                  <Button color="success" disabled={!props.userState.user}>
-                    Create character
-                  </Button>
-                </Form>
+              <CardTitle tag="h5" >
+                Create New Character
+              </CardTitle>
+              <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                  <Label htmlFor="name">Name:</Label>
+                  <Input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={newChar.name}
+                    onChange={handleChange}
+                    className="mb-2"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="race">Race:</Label>
+                  <Input
+                    type="select"
+                    name="race"
+                    id="race"
+                    value={newChar.race}
+                    onChange={handleChange}
+                    className="mb-2"
+                  >
+                    <option value="Human">Human</option>
+                    <option value="Giant">Giant</option>
+                    <option value="Elf">Elf</option>
+                    <option value="Dwarf">Dwarf</option>
+                  </Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label htmlFor="class">Class:</Label>
+                  <Input
+                    type="select"
+                    name="class"
+                    id="class"
+                    value={newChar.class}
+                    onChange={handleChange}
+                    className="mb-3"
+                  >
+                    <option value="Crusader">Crusader (durable fighter)</option>
+                    <option value="Inquisitor">
+                      Inquisitor (agile ranger)
+                    </option>
+                    <option value="Shepherd">Shepherd (powerful caster)</option>
+                  </Input>
+                </FormGroup>
+                <Button color="success" disabled={!props.userState.user}>
+                  Create character
+                </Button>
+              </Form>
             </Card>
           </Col>
         </Row>

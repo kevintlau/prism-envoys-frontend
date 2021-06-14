@@ -10,15 +10,20 @@ export default function ActionsPanel(props) {
   // );
   return (
     <Container>
-      <h5>Actions</h5>
+      <Row>
+          <Col>
+            <h3 className="text-center my-4">Actions</h3>
+          </Col>
+        </Row>
       {props.character.currentHp <= 0 ? (
         <h6>You are defeated.</h6>
       ) : (
-        props.actionsState.map((action, idx) => (
-          <Row>
+        props.actionsState.map((action) => (
+          <Row className="mb-2" key={action[0]}>
             <Col>
               <Button
-                key={idx}
+                className="w-100"
+                color={!action[0].includes("GOTO") ? "primary" : "warning"}
                 onClick={() => {
                   console.log(action[1]);
                   handleAction(
@@ -39,31 +44,5 @@ export default function ActionsPanel(props) {
         ))
       )}
     </Container>
-    // <div className="actions-panel">
-    //   <h3>Actions</h3>
-    //   {props.character.currentHp <= 0 ? (
-    //     <p>You are defeated.</p>
-    //   ) : (
-    //     props.actionsState.map((action, idx) => (
-    //       <button
-    //         key={idx}
-    //         onClick={() => {
-    //           console.log(action[1]);
-    //           handleAction(
-    //             action[1],
-    //             props.character,
-    //             props.setPlayerState,
-    //             props.enemy,
-    //             props.setEnemyState,
-    //             props.setResultState,
-    //             props.setActionsState
-    //           );
-    //         }}
-    //       >
-    //         {action[1]}
-    //       </button>
-    //     ))
-    //   )}
-    // </div>
   );
 }

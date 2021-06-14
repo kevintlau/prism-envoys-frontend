@@ -4,14 +4,14 @@ import { auth } from "./services/firebase";
 import { fetchChars } from "./services/char-backend-service";
 import { Container, Row, Col } from "reactstrap";
 
-// import stylesheets
-import "./App.css";
-
 // import components
 import Header from "./components/Header/Header";
 import Welcome from "./components/Welcome/Welcome";
 import CharacterSelect from "./components/CharacterSelect/CharacterSelect";
 import Game from "./components/Game/Game";
+import Footer from "./components/Footer/Footer"
+
+import "./App.css";
 
 export default function App() {
   // ------- STATES -----------------------------------------------------------
@@ -81,9 +81,9 @@ export default function App() {
   }, [userState.user]);
 
   return (
-    <>
+    <div className="body">
       <Header user={userState.user} setPlayerState={setPlayerState} />
-      <Container>
+      <Container className="main">
         <Row>
           <Col>
             {/* render app based on whether user's status */}
@@ -95,6 +95,7 @@ export default function App() {
           </Col>
         </Row>
       </Container>
-    </>
+      <Footer />
+    </div>
   );
 }

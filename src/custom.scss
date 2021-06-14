@@ -1,0 +1,60 @@
+// change the theme
+$theme-colors: (
+  "primary": #64dcfa,
+  "secondary": #ff91b8,
+  "warning": #fff266,
+  "info": #0dcaf0,
+  "danger": #dc3545,
+  "success": #198754,
+);
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+* {
+  font-family: "Titillium Web", Sans-Serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+  font-family: "Dosis", Sans-Serif;
+}
+
+
+/* 
+FONTS:
+{
+  Font-Family: 'Dosis', Sans-Serif;
+  Font-Size: 48px;
+}
+{
+  Font-Family: 'Titillium Web', Sans-Serif;
+  Font-Size: 16px;
+}
+
+COLORS:
+#64DCFA - blue
+#FF91B8 - pink
+#FFF266 - yellow
+#485A5E - dark slate blue
+#E0DEC5 - beige
+*/
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";

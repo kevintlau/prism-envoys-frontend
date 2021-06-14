@@ -22,9 +22,11 @@ export default function Header(props) {
 
   return (
     <div>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand onClick={handleTitleClick}>Prism Envoys</NavbarBrand>
-        <Nav className="ml-auto" navbar>
+      <Navbar style={{ backgroundColor: "#485A5E" }}>
+        <NavbarBrand className="mx-3 title-text" onClick={handleTitleClick}>
+          Prism Envoys
+        </NavbarBrand>
+        <Nav>
           {props.user ? (
             <>
               <NavbarText>Welcome, {username}</NavbarText>
