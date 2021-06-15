@@ -55,6 +55,7 @@ export default function App() {
     ),
   };
 
+  // grab character select list on login / logout
   useEffect(() => {
     const getAppData = async () => {
       if (!userState.user) return;

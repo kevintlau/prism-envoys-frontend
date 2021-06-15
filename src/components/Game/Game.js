@@ -9,10 +9,16 @@ import { Container, Row, Col } from "reactstrap";
 export default function Game(props) {
   const character = props.playerState.character;
 
+  // enemyState to track whether player is in combat
   const [enemyState, setEnemyState] = useState(null);
+
+  // resultState to display a message in response to player actions
   const [resultState, setResultState] = useState(
     "Welcome!~ You wake up from a long nap."
   );
+
+  // actionsState to hold the actions that player can make
+  // actions in non-town locations are randomly generated
   const [actionsState, setActionsState] = useState(
     generateActions(false, character.class, character.location)
   );

@@ -4,6 +4,7 @@ import CLASSES from "./classes";
 // number of random actions in field areas
 const FIELD_ACTION_COUNT = 4;
 
+// TODO: add non-combat exploration actions
 export const ACTIONS = {
   [LOCATIONS.GLEAM_TOWN]: {
     REFINE_WEAPON: "Refine your weapon at the blacksmith",
@@ -40,6 +41,8 @@ export const MOVEMENT_ACTIONS = {
   },
 };
 
+// actions found only in combat
+// TODO: implement fleeing
 export const BATTLE_ACTIONS = {
   [CLASSES.CRUSADER]: {
     ATTACK: "Guarded Slash",
@@ -59,8 +62,7 @@ export const BATTLE_ACTIONS = {
 };
 
 export default function generateActions(inBattle, playerClass, location) {
-  if (inBattle) {
-    console.log("in battle");
+  if (inBattle) {   // player is "inBattle" if enemy is present
     return Object.entries(BATTLE_ACTIONS[playerClass]);
   } else {
     let actions = [];
@@ -69,6 +71,7 @@ export default function generateActions(inBattle, playerClass, location) {
     const actionEntries = Object.entries(ACTIONS[location]);
     const movementActionEntries = Object.entries(MOVEMENT_ACTIONS[location]);
     switch (location) {
+      // get town actions or random field location actions
       case LOCATIONS.GLEAM_TOWN:
         actions = [...actionEntries, ...movementActionEntries];
         break;
@@ -79,6 +82,7 @@ export default function generateActions(inBattle, playerClass, location) {
           );
           if (!actionsIdxArray.includes(idx)) actionsIdxArray.push(idx);
         }
+        // place all actions into an array for rendering
         actions = [
           ...actionsIdxArray.map((idx) => actionEntries[idx]),
           ...movementActionEntries,

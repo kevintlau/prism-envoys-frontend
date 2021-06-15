@@ -14,6 +14,7 @@ export default function PlayerPanel(props) {
         ...prevState,
         characters: charactersData.data,
       }));
+      // go back to character select
       props.setPlayerState({ character: null });
     } catch (error) {
       console.error(error);
@@ -21,6 +22,7 @@ export default function PlayerPanel(props) {
   };
 
   // same as handleDelete function in
+  // TODO: refactor code to make it more DRY
   const handleDie = async (charId) => {
     if (!props.userState.user) return;
     try {

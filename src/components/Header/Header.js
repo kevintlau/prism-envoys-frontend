@@ -10,6 +10,9 @@ import {
 import { login, logout } from "../../services/firebase";
 
 export default function Header(props) {
+
+  // clicking title drops the current character from playerState
+  //   and goes back to character select
   const handleTitleClick = () => {
     props.setPlayerState((prevState) => ({
       ...prevState,
@@ -22,7 +25,7 @@ export default function Header(props) {
 
   return (
     <div>
-      <Navbar style={{ backgroundColor: "#485A5E" }}>
+      <Navbar>
         <NavbarBrand className="mx-3 title-text" onClick={handleTitleClick}>
           Prism Envoys
         </NavbarBrand>

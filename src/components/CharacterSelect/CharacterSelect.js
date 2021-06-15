@@ -69,6 +69,7 @@ export default function CharacterSelect(props) {
   const handleSelect = async (charId) => {
     if (!props.userState.user) return;
     try {
+      // load character into playerState
       const characterData = await selectChar(charId, props.userState.user.uid);
       props.setPlayerState((prevState) => ({
         ...prevState,
@@ -82,6 +83,7 @@ export default function CharacterSelect(props) {
   const handleDelete = async (charId) => {
     if (!props.userState.user) return;
     try {
+      // delete character and update the charState without the deleted character
       const charactersData = await deleteChar(charId, props.userState.user.uid);
       props.setCharState((prevState) => ({
         ...prevState,
@@ -92,7 +94,6 @@ export default function CharacterSelect(props) {
     }
   };
 
-  // JSX component
   return (
     <div className="char-select">
       <Container>
