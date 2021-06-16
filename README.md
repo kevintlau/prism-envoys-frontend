@@ -28,6 +28,12 @@ Desktop functionality:
 
 ![Battle Screen](https://i.imgur.com/15FU6wo.png)
 
+ERDs and React states:
+
+![ERD](https://i.imgur.com/gJGBNsr.png)
+
+![React States](https://i.imgur.com/7ZbBZob.png)
+
 ### Getting Started
 
 Click [here](https://prism-envoys.netlify.app/) to visit app!
